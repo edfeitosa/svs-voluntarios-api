@@ -16,7 +16,7 @@ $validateEmail = new ValidateEmail();
 
 if ($data->usu_name == '' || $data->usu_email == '' || $data->usu_cel == '') {
     
-    http_response_code(201);
+    http_response_code(400);
     echo json_encode(array(
         'type' => 'alert',
         'title' => 'Campos vazios',
@@ -54,7 +54,7 @@ if ($data->usu_name == '' || $data->usu_email == '' || $data->usu_cel == '') {
 
     } else {
 
-        http_response_code(201);
+        http_response_code(400);
         echo json_encode(array(
             'type' => 'error',
             'title' => 'Não é válido',
