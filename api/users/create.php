@@ -5,6 +5,13 @@ include_once '../../config/database.php';
 include_once '../objects/users.php';
 include_once '../_libs/validateEmail.php';
 
+$level_description = array(
+    "1" => "membro da central de voluntários",
+    "2" => "pastor",
+    "3" => "líder",
+    "4" => "voluntário"
+);
+
 $database = new Database();
 $db = $database->getConnection();
  
@@ -16,7 +23,6 @@ $validateEmail = new ValidateEmail();
 
 if ($data->usu_name == '' || $data->usu_email == '' || $data->usu_cel == '') {
     
-    http_response_code(400);
     echo json_encode(array(
         'type' => 'alert',
         'title' => 'Campos vazios',
@@ -38,7 +44,7 @@ if ($data->usu_name == '' || $data->usu_email == '' || $data->usu_cel == '') {
             echo json_encode(array(
                 'type' => 'success',
                 'title' => 'Sucesso',
-                'message' => 'Novo voluntário cadastrado com sucesso'
+                'message' => 'Novo ' . $level_description[$users->usu_level] . ' cadastrado com sucesso'
             ));
             
         } else {
@@ -47,14 +53,13 @@ if ($data->usu_name == '' || $data->usu_email == '' || $data->usu_cel == '') {
             echo json_encode(array(
                 'type' => 'error',
                 'title' => 'Algo aconteceu...',
-                'message' => 'Não foi possível cadastrar novo usuário. Tente novamente'
+                'message' => 'Não foi possível cadastrar novo ' . $level_description[$users->usu_level] . '. Tente novamente'
             ));
             
         }
 
     } else {
 
-        http_response_code(400);
         echo json_encode(array(
             'type' => 'error',
             'title' => 'Não é válido',
