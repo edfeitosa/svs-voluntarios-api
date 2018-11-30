@@ -28,44 +28,42 @@ if ($data->usu_name == '' || $data->usu_email == '' || $data->usu_cel == '') {
         'title' => 'Campos vazios',
         'message' => 'Antes de continuar, preencha todos os campos'
     ));
+    exit;
     
+}
+
+if (!$validateEmail->validate($data->usu_email)) {
+
+    echo json_encode(array(
+        'type' => 'error',
+        'title' => 'Algo está errado...',
+        'message' => 'O e-mail informado não é válido. Verifique a informação digitada e tente novamente'
+    ));
+    exit;
+
+}
+
+$users->usu_name = $data->usu_name;
+$users->usu_email = $data->usu_email;
+$users->usu_cel = $data->usu_cel;
+$users->usu_level = $data->usu_level;
+
+if ($users->create()) {
+
+    http_response_code(201);
+    echo json_encode(array(
+        'type' => 'success',
+        'title' => 'Sucesso',
+        'message' => 'Novo ' . $level_description[$users->usu_level] . ' cadastrado com sucesso'
+    ));
+
 } else {
 
-    if ($validateEmail->validate($data->usu_email)) {
-        
-        $users->usu_name = $data->usu_name;
-        $users->usu_email = $data->usu_email;
-        $users->usu_cel = $data->usu_cel;
-        $users->usu_level = $data->usu_level;
-        
-        if ($users->create()) {
-            
-            http_response_code(201);
-            echo json_encode(array(
-                'type' => 'success',
-                'title' => 'Sucesso',
-                'message' => 'Novo ' . $level_description[$users->usu_level] . ' cadastrado com sucesso'
-            ));
-            
-        } else {
-            
-            http_response_code(503);
-            echo json_encode(array(
-                'type' => 'error',
-                'title' => 'Algo aconteceu...',
-                'message' => 'Não foi possível cadastrar novo ' . $level_description[$users->usu_level] . '. Tente novamente'
-            ));
-            
-        }
+    http_response_code(503);
+    echo json_encode(array(
+        'type' => 'error',
+        'title' => 'Algo aconteceu...',
+        'message' => 'Não foi possível cadastrar novo ' . $level_description[$users->usu_level] . '. Tente novamente'
+    ));
 
-    } else {
-
-        echo json_encode(array(
-            'type' => 'error',
-            'title' => 'Não é válido',
-            'message' => 'O e-mail informado não é válido. Verifique a informação digitada e tente novamente'
-        ));
-
-    }
-    
 } ?>

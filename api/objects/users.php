@@ -47,4 +47,16 @@
         
         return $stmt;
     }
+    
+    function getEmail() {
+        
+        $query = "SELECT a.usu_nome, a.usu_email FROM " . $this->table_name . " a WHERE a.usu_email = :usu_email";
+        
+        $stmt = $this->conn->prepare($query);
+        $this->usu_email = htmlspecialchars(strip_tags($this->usu_email));
+        $stmt->bindParam(":usu_email", $this->usu_email);
+        $stmt->execute();
+        
+        return $stmt;
+    }
 } ?>
