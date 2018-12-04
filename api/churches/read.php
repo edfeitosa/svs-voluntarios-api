@@ -2,36 +2,34 @@
 header("Access-Control-Allow-Methods: GET");
 
 include_once '../../config/database.php';
-include_once '../objects/users.php';
+include_once '../objects/churches.php';
 
 $database = new Database();
 $db = $database->getConnection();
  
-$users = new Users($db);
-$stmt = $users->read();
+$churches = new Churches($db);
+$stmt = $churches->read();
 $num = $stmt->rowCount();
 
 if ($num > 0) {
     
-    $users_arr["users"] = array();
+    $churches_arr["churches"] = array();
  
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         
         extract($row);
  
-        $users_item = array(
-            "usu_id" => $usu_id,
-            "usu_name" => $usu_name,
-            "usu_email" => $usu_email,
-            "usu_cel" => $usu_cel,
-            "usu_level" => $usu_level
+        $churches_item = array(
+            "chu_id" => $chu_id,
+            "chu_name" => $chu_name,
+            "chu_status" => $chu_status
         );
         
-        array_push($users_arr["users"], $users_item);
+        array_push($churches_arr["churches"], $churches_item);
     }
 
     http_response_code(201);
-    echo json_encode($users_arr);
+    echo json_encode($churches_arr);
     
 } else {
     

@@ -2,36 +2,34 @@
 header("Access-Control-Allow-Methods: GET");
 
 include_once '../../config/database.php';
-include_once '../objects/users.php';
+include_once '../objects/departments.php';
 
 $database = new Database();
 $db = $database->getConnection();
  
-$users = new Users($db);
-$stmt = $users->read();
+$departments = new Departments($db);
+$stmt = $departments->read();
 $num = $stmt->rowCount();
 
 if ($num > 0) {
     
-    $users_arr["users"] = array();
+    $departments_arr["departments"] = array();
  
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         
         extract($row);
  
-        $users_item = array(
-            "usu_id" => $usu_id,
-            "usu_name" => $usu_name,
-            "usu_email" => $usu_email,
-            "usu_cel" => $usu_cel,
-            "usu_level" => $usu_level
+        $departments_item = array(
+            "dep_id" => $dep_id,
+            "dep_name" => $dep_name,
+            "dep_status" => $dep_status
         );
         
-        array_push($users_arr["users"], $users_item);
+        array_push($departments_arr["departments"], $departments_item);
     }
 
     http_response_code(201);
-    echo json_encode($users_arr);
+    echo json_encode($departments_arr);
     
 } else {
     
